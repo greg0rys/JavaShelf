@@ -47,12 +47,16 @@ public class Library
 
     /* ---- BEGIN LIBRARY ----*/
     private HashMap<Integer, BookShelf> ShelfMap = new HashMap<>();
-    private final int shelf_id = IDManager.generate_id();
+    private final int BOOK_TITLE = 1;
+    private final int BOOK_AUTHOR = 2;
+
 
 
     public void addBookShelf(BookShelf bookShelf)
     {
-        ShelfMap.put(shelf_id, bookShelf);
+        int id = IDManager.generate_id();
+        bookShelf.setID(id);
+        ShelfMap.put(id, bookShelf);
     }
 
     public BookShelf getBookShelf(int shelfId)
@@ -66,23 +70,36 @@ public class Library
             out.println("Shelf ID: " + shelf.getKey() + ", Book Shelf: " + shelf.getValue());
     }
 
-    public boolean open()
+    public void searchTitle(String title)
     {
-        return menu();
+        for(Integer id : ShelfMap.keySet())
+        {
+            BookShelf shelf = ShelfMap.get(id);
+            shelf.searchBooks(BOOK_TITLE, title);
+        }
     }
 
-    public boolean menu()
+    public void open()
     {
+        menu();
+    }
+
+    private void menu()
+    {
+        boolean run = true;
         Scanner scanner = new Scanner(System.in);
         int input = scanner.nextInt();
-        switch(input){
-            case 1:
-                out.println("Time to search the library");
-                search();
-                break;
-            case 2:
-                out.print
+        while (run)
+        {
+            switch(input){
+                case 1:
+                    out.println("Time to search the library");
+                    search();
+                    break;
+                case 2:
+                    out.print
+            }
         }
-        return false;
+
     }
 }
