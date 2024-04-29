@@ -1,9 +1,6 @@
 package shenefelt.libraryManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.System.out;
 
@@ -67,5 +64,25 @@ public class Library
     {
         for(Map.Entry<Integer, BookShelf> shelf : ShelfMap.entrySet())
             out.println("Shelf ID: " + shelf.getKey() + ", Book Shelf: " + shelf.getValue());
+    }
+
+    public boolean open()
+    {
+        return menu();
+    }
+
+    public boolean menu()
+    {
+        Scanner scanner = new Scanner(System.in);
+        int input = scanner.nextInt();
+        switch(input){
+            case 1:
+                out.println("Time to search the library");
+                search();
+                break;
+            case 2:
+                out.print
+        }
+        return false;
     }
 }
