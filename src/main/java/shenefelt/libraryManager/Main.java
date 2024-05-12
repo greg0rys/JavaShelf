@@ -63,6 +63,7 @@ public class Main
         }
 
         new Driver().start();
+        exit(0);
     }
 
 }
