@@ -21,62 +21,76 @@ public class Library
         private static ArrayList<Integer> usedSectionIDs = new ArrayList<>();
 
 
-        public static int generate_id()
+        public static int generateId()
         {
-            int new_id = new Random().nextInt(Integer.MAX_VALUE);
-            while (usedIDs.contains(new_id))
+            int newId = new Random().nextInt(Integer.MAX_VALUE);
+            while (usedIDs.contains(newId))
             {
-                new_id = new Random().nextInt(Integer.MAX_VALUE);
+                newId = new Random().nextInt(Integer.MAX_VALUE);
             }
-            usedIDs.add(new_id);
-            return new_id;
+            usedIDs.add(newId);
+            return newId;
         }
 
-        public static int generate_section_number()
+        public static int generateSectionNumber()
         {
-            int new_id = new Random().nextInt(900);
+            int newId = new Random().nextInt(900);
 
-            while (usedSectionIDs.contains(new_id)) {
-                new_id = new Random().nextInt(900);
+            while (usedSectionIDs.contains(newId)) {
+                newId = new Random().nextInt(900);
             }
-            usedSectionIDs.add(new_id);
-            return new_id;
+            usedSectionIDs.add(newId);
+            return newId;
         }
 
     }
 
     /* ---- BEGIN LIBRARY ----*/
-    private HashMap<Integer, BookShelf> ShelfMap = new HashMap<>();
-    private final int BOOK_TITLE = 1;
-    private final int BOOK_AUTHOR = 2;
+    private HashMap<Integer, BookShelf> shelfMap;
+    private LibraryScanner scanner;
 
+    public Library()
+    {
+        shelfMap = null;
+        scanner = null;
+    }
 
 
     public void addBookShelf(BookShelf bookShelf)
     {
-        int id = IDManager.generate_id();
-        bookShelf.setID(id);
-        ShelfMap.put(id, bookShelf);
+        if (shelfMap == null)
+            shelfMap = new HashMap<>();
+
+        bookShelf.setID(IDManager.generateId());
+        shelfMap.put(bookShelf.getID(), bookShelf);
     }
 
     public BookShelf getBookShelf(int shelfId)
     {
-        return ShelfMap.get(shelfId);
+        return shelfMap.get(shelfId);
     }
 
-    public void print_shelf_map()
+    public void printShelfMap()
     {
-        for(Map.Entry<Integer, BookShelf> shelf : ShelfMap.entrySet())
+        for(Map.Entry<Integer, BookShelf> shelf : shelfMap.entrySet())
             out.println("Shelf ID: " + shelf.getKey() + ", Book Shelf: " + shelf.getValue());
     }
 
-    public void searchTitle(String title)
+    public Book findBook (String identity)
     {
-        for(Integer id : ShelfMap.keySet())
+        Book result = null;
+
+        if (scanner == null)
+            scanner = new LibraryScanner();
+
+        for(Integer id : shelfMap.keySet())
         {
-            BookShelf shelf = ShelfMap.get(id);
-            shelf.searchBooks(BOOK_TITLE, title);
+            result = scanner.scanShelf (identity, shelfMap.get(id));
         }
+
+        scanner = null;
+
+        return result;
     }
 
     public void open()
@@ -84,22 +98,13 @@ public class Library
         menu();
     }
 
+    public void close()
+    {
+        out.println("Thanks for visiting the library");
+    }
+
     private void menu()
     {
-        boolean run = true;
-        Scanner scanner = new Scanner(System.in);
-        int input = scanner.nextInt();
-        while (run)
-        {
-            switch(input){
-                case 1:
-                    out.println("Time to search the library");
-                    search();
-                    break;
-                case 2:
-                    out.print
-            }
-        }
-
+        // .... rest of the menu method implementation comes here
     }
 }

@@ -1,27 +1,26 @@
 package shenefelt.libraryManager;
 
-public class Book {
-
-
-
-    // ---- BOOK CLASS START ----
+public class Book
+{
 
     private String title;
     private String author;
     private String genre;
-    private final int book_id = Library.IDManager.generate_id();
+    private final int BOOK_ID = Library.IDManager.generateId();
+    private boolean isSeries;
 
-    public Book(String title, String author, String genre)
+    public Book(String bTitle, String bAuthor, String bGenre, boolean inSeries)
     {
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
+        title = bTitle;
+        author = bAuthor;
+        genre = bGenre;
+        isSeries = inSeries;
     }
 
     public Book()
     {
-        this.title = "";
-        this.author = "";
+        title = author = " ";
+        isSeries = false;
     }
 
     public String getTitle() { return title; }
@@ -33,11 +32,13 @@ public class Book {
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
 
-    public int getBook_id() { return book_id; }
+    public int getBook_id() { return BOOK_ID; }
+
+    public boolean aSeries() { return isSeries; }
+    public void setSeries (boolean series) { isSeries = series; }
 
 
-
-
-
-
+    public String display()
+    {
+    }
 }

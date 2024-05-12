@@ -1,4 +1,5 @@
 package shenefelt.libraryManager;
+import static java.lang.System.exit;
 import static java.lang.System.out;
 
 public class Main
@@ -7,7 +8,7 @@ public class Main
     {
         Library library = new Library();
         library.open();
-
-        out.println("Thanks for visiting the library");
+        library.close();
+        exit(0);
     }
 }

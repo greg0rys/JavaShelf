@@ -1,49 +1,199 @@
 package shenefelt.libraryManager;
+import static java.lang.System.out;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Random;
 
 
-public class BookShelf {
-    private final int CAPACITY = 200;
-    private ArrayList<Book> books = new ArrayList<>();
-    private int shelfID;
 
-    public BookShelf() {
+@SuppressWarnings("FieldCanBeLocal")
+public class BookShelf
+{
 
-    }
+    private final int SHELF_CAPACITY = 200; // Capacity of this shelf;
+    private final int MAX_ID = 8500;  // the largest ID that a shelf can be assigned;
+    private Hashtable<String,Book> books = null;  // the table of books on this shelf.
+    private final int SHELF_ID = Math.abs(new Random().nextInt(MAX_ID));  // a randomly generated ID;
+    private boolean fromSuppliedHashConstructor = false; // boolean flag to see if it came from copy constructor.
 
-    public BookShelf(ArrayList<Book> book_list) {
-        if (book_list != null && book_list.size() <= CAPACITY) {
-            books.addAll(book_list);
-        } else {
+    /**
+     * Standard empty constructor nothing fancy
+     *
+     */
+    public BookShelf() {}
 
-        }
-    }
-
-    public void setID(int id) {
-        if (id <= 0)
-            shelfID = 1;
-
-        shelfID = id;
-    }
-
-    public Book searchBooks(int searchType, String title)
+    /**
+     * Constructor that copies an already existing table.
+     * @param bookList the list of books we wish to add.
+     */
+    public BookShelf(Hashtable<String,Book> bookList)
     {
-        Book b = null;
+        fromSuppliedHashConstructor = true;
+        if(!copyTable(bookList))
+            out.println("Unable to initialize BookShelf");
+    }
 
-        switch (searchType) {
-            case 1:
-                for (Book book : books) {
-                    if (book.getTitle().equalsIgnoreCase(title)) {
-                        return book;
-                    }
-                }
-                break;
-            case 2:
+    /**
+     * Copy an existing bookshelf.
+     * @param bookShelf the shelf we are going to copy
+     * @return true if copied else false.
+     */
+    private boolean copyTable(Hashtable<String,Book> bookShelf)
+    {
+        // if this wasn't called from the constructor that takes a hash return
+        if(!fromSuppliedHashConstructor)
+            return false;
+
+        if(bookShelf == null || bookShelf.isEmpty())
+            return false;
+
+        books = new Hashtable<>(bookShelf);
+
+        fromSuppliedHashConstructor = false;
+        return true;
+    }
+
+    /**
+     * Print all the books on the shelf.
+     */
+    public void printShelfContents()
+    {
+        if(books == null || books.isEmpty())
+            out.println("The shelf is empty!");
 
 
+        for(String name: books.keySet())
+        {
+            for(Book book: books.values())
+            {
+                out.println(name + "\t" + book.display());
+            }
         }
 
-        return b;
+        out.println("Other shelf details:");
+        out.println("\tShelf ID: " + SHELF_ID);
+        out.println("\tNumber of books: " + books.size());
+        out.println("\tUsed Shelf Space: " + calculateUsedSpace() + "/" + SHELF_CAPACITY);
+    }
+
+    /**
+     * Get the ID of this shelf.
+     * @return SHELF_ID the ID of this shelf.
+     */
+    public int getID()
+    {
+        return SHELF_ID;
+    }
+
+    /**
+     * Add a new Book to the shelf
+     * @param B the book we are adding.
+     * @return true if we added the book false if else.
+     */
+    public boolean addBook(Book B)
+    {
+        if(B == null)
+            return false;
+
+        if(books == null)
+            books = new Hashtable<>();
+
+        books.put(B.getTitle(), B);
+        return true;
+    }
+
+    /**
+     * Find a Book on the shelf.
+     * @param title the name of the Book we are looking for
+     * @return the Book we were looking for null if else.
+     */
+    public Book findBookByTitle(String title)
+    {
+        if(books == null || books.isEmpty() || title.isEmpty())
+            return null;
+
+        return books.get(title);
+    }
+
+    /**
+     * Remove a Book by it's title.
+     * @param title the name of the book we are looking to remove
+     * @return true if we were able to remove the book else false.
+     */
+    public boolean removeBook(String title)
+    {
+        if (books == null || books.isEmpty() || title.isEmpty())
+            return false;
+
+        return books.remove(title) != null;
+    }
+
+    /**
+     * Move a Book from this Shelf to a new Shelf.
+     * @param title the title of the book we wish to move
+     * @param shelf the new shelf the book will be on
+     * @return true if complete false if else.
+     */
+    public boolean moveBook(String title, BookShelf shelf)
+    {
+        if (books == null || books.isEmpty() || title.isEmpty() || shelf == null)
+            return false;
+
+        Book book = books.get(title);
+        if (book == null)
+            return false;
+
+        if (shelf.addBook(book))
+        {
+            books.remove(title);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Calculate how many more books can fit on the shelf.
+     * @return the number of books that can fit on this shelf.
+     */
+    public int calculateUsedSpace()
+    {
+        if(books == null)
+            return 0;
+
+        return (books.size() - SHELF_CAPACITY);
+    }
+
+    /**
+     * Get total number of books
+     * @return the total number of books.
+     */
+    public int getNumberOfBooks()
+    {
+        if (books == null || books.isEmpty())
+            return 0;
+
+        return books.size();
+    }
+
+    /**
+     * Merge the given shelf into this shelf.
+     * @param shelf the shelf we wish to merge into this shelf.
+     * @return true if the merge was able to happen false if else.
+     */
+    public boolean mergeShelf(BookShelf shelf)
+    {
+        if (shelf == null || shelf.books == null || shelf.books.isEmpty())
+            return false;
+
+        for (String title : shelf.books.keySet())
+        {
+            Book book = shelf.books.get(title);
+            if (book != null)
+                books.put(title, book);
+        }
+
+        shelf = null;
+        return true;
     }
 }
