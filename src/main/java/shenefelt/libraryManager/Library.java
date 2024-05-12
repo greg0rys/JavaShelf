@@ -7,53 +7,10 @@ import static java.lang.System.out;
 public class Library
 {
 
-    /**
-     * Generate a random id up to the safe integer max value
-     * Ensure that the ID isn't already in use, and then store the newly assigned ID
-     * If the ID is found in use - loop until the random number generated is no longer in the
-     * arraylist.
-     */
-    public static class IDManager
-    {
-        // tell the compiler to ignore these warnings for now
-        @SuppressWarnings("FieldMayBeFinal")
-        private static ArrayList<Integer> usedIDs = new ArrayList<>();
-        private static ArrayList<Integer> usedSectionIDs = new ArrayList<>();
-
-
-        public static int generateId()
-        {
-            int newId = new Random().nextInt(Integer.MAX_VALUE);
-            while (usedIDs.contains(newId))
-            {
-                newId = new Random().nextInt(Integer.MAX_VALUE);
-            }
-            usedIDs.add(newId);
-            return newId;
-        }
-
-        public static int generateSectionNumber()
-        {
-            int newId = new Random().nextInt(900);
-
-            while (usedSectionIDs.contains(newId)) {
-                newId = new Random().nextInt(900);
-            }
-            usedSectionIDs.add(newId);
-            return newId;
-        }
-
-    }
-
     /* ---- BEGIN LIBRARY ----*/
-    private HashMap<Integer, BookShelf> shelfMap;
-    private LibraryScanner scanner;
+    private HashMap<Integer, BookShelf> shelfMap = null;
 
-    public Library()
-    {
-        shelfMap = null;
-        scanner = null;
-    }
+    public Library() {}
 
 
     public void addBookShelf(BookShelf bookShelf)
@@ -61,7 +18,6 @@ public class Library
         if (shelfMap == null)
             shelfMap = new HashMap<>();
 
-        bookShelf.setID(IDManager.generateId());
         shelfMap.put(bookShelf.getID(), bookShelf);
     }
 
@@ -76,22 +32,6 @@ public class Library
             out.println("Shelf ID: " + shelf.getKey() + ", Book Shelf: " + shelf.getValue());
     }
 
-    public Book findBook (String identity)
-    {
-        Book result = null;
-
-        if (scanner == null)
-            scanner = new LibraryScanner();
-
-        for(Integer id : shelfMap.keySet())
-        {
-            result = scanner.scanShelf (identity, shelfMap.get(id));
-        }
-
-        scanner = null;
-
-        return result;
-    }
 
     public void open()
     {
@@ -106,5 +46,37 @@ public class Library
     private void menu()
     {
         // .... rest of the menu method implementation comes here
+    }
+
+
+    private boolean searchLibraryForTitle (ArrayList<Book> resultList, String identity,
+                                           Hashtable<Integer, BookShelf> shelfCollection)
+    {
+        boolean found = false;
+        Book result = null;
+        int shelfID = 0;
+
+        for(BookShelf s : shelfCollection.values())
+        {
+            result = s.findBookByTitle(identity);
+            shelfID = s.getID(); // I want the search results to display what shelf a book was found on
+            if (result != null)
+            {
+                resultList.add(result);
+                found = true;
+            }
+        }
+
+        return found;
+    }
+
+    public int getTotalBooks()
+    {
+        int totalBooks = 0;
+
+        for (BookShelf shelf : shelfMap.values())
+            totalBooks += shelf.getNumberOfBooks();
+
+        return totalBooks;
     }
 }

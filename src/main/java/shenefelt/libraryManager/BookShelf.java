@@ -18,7 +18,6 @@ public class BookShelf
 
     /**
      * Standard empty constructor nothing fancy
-     *
      */
     public BookShelf() {}
 
@@ -62,13 +61,15 @@ public class BookShelf
             out.println("The shelf is empty!");
 
 
-        for(String name: books.keySet())
-        {
-            for(Book book: books.values())
-            {
-                out.println(name + "\t" + book.display());
-            }
-        }
+        for(Book book: books.values())
+            book.display();
+
+        displayShelfDetails();
+
+    }
+
+    private void displayShelfDetails()
+    {
 
         out.println("Other shelf details:");
         out.println("\tShelf ID: " + SHELF_ID);
@@ -196,4 +197,5 @@ public class BookShelf
         shelf = null;
         return true;
     }
+
 }

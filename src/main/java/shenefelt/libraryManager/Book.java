@@ -1,13 +1,18 @@
 package shenefelt.libraryManager;
 
+import java.util.ArrayList;
+
+import static java.lang.System.out;
+
 public class Book
 {
 
-    private String title;
-    private String author;
-    private String genre;
-    private final int BOOK_ID = Library.IDManager.generateId();
-    private boolean isSeries;
+    private String title = "";
+    private String author = "";
+    private String genre = "";
+    private final int BOOK_ID = Helpers.getBookID();
+    private boolean isSeries = false;
+    private ArrayList<Book> booksInSeries = null;
 
     public Book(String bTitle, String bAuthor, String bGenre, boolean inSeries)
     {
@@ -15,6 +20,8 @@ public class Book
         author = bAuthor;
         genre = bGenre;
         isSeries = inSeries;
+
+        if(isSeries) booksInSeries = new ArrayList<>();
     }
 
     public Book()
@@ -38,7 +45,25 @@ public class Book
     public void setSeries (boolean series) { isSeries = series; }
 
 
-    public String display()
+    public void display()
     {
+
+         out.println("Title: " + title + "\nAuthor: " + author + "\nGenre: " + genre + "\nID: " + BOOK_ID);
+    }
+
+    public void displaySeries()
+    {
+        if(booksInSeries == null || booksInSeries.isEmpty()) return;
+        out.println("Total Books in this series: " + booksInSeries.size());
+        if(isSeries)
+            for(Book b : booksInSeries)
+            {
+                b.display();
+                out.println("***");
+                out.println();
+            }
+
+        else
+            out.println("This book is not part of a series.");
     }
 }
