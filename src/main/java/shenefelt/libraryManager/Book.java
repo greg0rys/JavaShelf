@@ -1,6 +1,7 @@
 package shenefelt.libraryManager;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import static java.lang.System.out;
 
@@ -14,6 +15,7 @@ public class Book
     private boolean isSeries = false;
     private ArrayList<Book> booksInSeries = null;
     private double price = 0;
+    private Scanner scanner = new Scanner(System.in);
 
     /**
      * Create a Book object with all user supplied fields.
@@ -37,8 +39,7 @@ public class Book
      */
     public Book()
     {
-        title = author = " ";
-        isSeries = false;
+        setAllEmpty();
     }
 
     // Get and Set methods for the Book Object
@@ -97,4 +98,58 @@ public class Book
         else
             out.println("This book is not part of a series.");
     }
+
+    public boolean collectBookInfo(Book newBook)
+    {
+        if(newBook == null) newBook = new Book();
+        return collect(newBook);
+    }
+
+    private boolean collect(Book newBook)
+    {
+        String title = "";
+        String author = "";
+        String genre = "";
+        boolean isSeries = false;
+        ArrayList<Book> booksInSeries = null;
+        double price = 0;
+        boolean valid = false;
+
+        out.print("Please enter the book title: ");
+        title = scanner.nextLine();
+        out.print("Please enter the author: ");
+        author = scanner.nextLine();
+        out.print("Please enter the genre: ");
+        genre = scanner.nextLine();
+        out.print("Is this book part of a series? (true/false): ");
+        isSeries = scanner.nextBoolean();
+        out.print("Please enter the price: ");
+        price = scanner.nextDouble();
+
+
+       newBook.setAll(title, author, genre, isSeries, price);
+       return true;
+
+    }
+
+    private void setAll(String title, String author, String genre, boolean isSeries, double price)
+    {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.isSeries = isSeries;
+        this.price = price;
+    }
+
+
+    private void setAllEmpty()
+    {
+        title = " ";
+        author = " ";
+        genre = " ";
+        isSeries = false;
+        price = 0.00;
+
+    }
+
 }

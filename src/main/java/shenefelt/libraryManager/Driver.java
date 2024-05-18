@@ -20,6 +20,8 @@ public class Driver
     private static void controller()
     {
         boolean valid = false;
+        int numBooks = (masterLibrary.hasBooks() ? masterLibrary.getTotalBooks() : 0);
+        Book newBook = null;
         displayMenu();
 
         out.print("Please enter your choice: ");
@@ -34,19 +36,25 @@ public class Driver
                 out.println("Goodbye!");
                 break;
             case 1:
-                out.println("The total number of books is: " + masterLibrary.getTotalBooks());
+                out.println("The total number of books is: " + numBooks);
+                controller();
                 break;
             case 2:
+
+               newBook = new Book();
+               valid = newBook.collectBookInfo(newBook);
+               controller();
                 break;
             case 3:
                 out.println("LOL");
+                controller();
                 break;
             case 16:
                 out.println("Not a valid choice, try again");
                 controller(); // if you just run displayMenu() it causes a crash because there is no input given in displayMenu so it just ends the program. Call the controller again to start over.
                 break;
             default:
-                displayMenu();
+                controller();
                 break;
         }
     }

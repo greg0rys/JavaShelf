@@ -32,25 +32,12 @@ public class BookShelf
             out.println("Unable to initialize BookShelf");
     }
 
-    /**
-     * Copy an existing bookshelf.
-     * @param bookShelf the shelf we are going to copy
-     * @return true if copied else false.
-     */
-    private boolean copyTable(Hashtable<String,Book> bookShelf)
+    public boolean hasCapacity()
     {
-        // if this wasn't called from the constructor that takes a hash return
-        if(!fromSuppliedHashConstructor)
-            return false;
-
-        if(bookShelf == null || bookShelf.isEmpty())
-            return false;
-
-        books = new Hashtable<>(bookShelf);
-
-        fromSuppliedHashConstructor = false;
-        return true;
+        return books.size() < SHELF_CAPACITY;
     }
+
+
 
     /**
      * Print all the books on the shelf.
@@ -88,18 +75,22 @@ public class BookShelf
 
     /**
      * Add a new Book to the shelf
-     * @param B the book we are adding.
+     * @param newBook the book we are adding.
      * @return true if we added the book false if else.
      */
-    public boolean addBook(Book B)
+    public boolean addBook(Book newBook)
     {
-        if(B == null)
-            return false;
-
         if(books == null)
             books = new Hashtable<>();
 
-        books.put(B.getTitle(), B);
+        if (books.size() >= SHELF_CAPACITY)
+            return false;
+
+        if(newBook == null)
+            return false;
+
+        books.put(newBook.getTitle(), newBook);
+
         return true;
     }
 
@@ -113,6 +104,7 @@ public class BookShelf
         if(books == null || books.isEmpty() || title.isEmpty())
             return null;
 
+        books.contains(title);
         return books.get(title);
     }
 
