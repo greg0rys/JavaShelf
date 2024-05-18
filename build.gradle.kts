@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "shenefelt.libraryManager"
-version = "1.0-SNAPSHOT"
+version = "5.12.24"
 
 repositories {
     mavenCentral()
